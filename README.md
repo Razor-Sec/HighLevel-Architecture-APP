@@ -5,6 +5,7 @@
 ## How to run 
 
 ```bash
+docker network create fastapi_network
 docker-compose up -d 
 ```
 

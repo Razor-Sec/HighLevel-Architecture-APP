@@ -1,0 +1,54 @@
+version: '3.7'
+
+services:
+    db:
+        container_name: "db"
+        image: mariadb
+        environment:
+            MARIADB_DATABASE: ngelab1
+            MARIADB_ROOT_PASSWORD: bakrie123
+        networks:
+            - web-tier
+        expose:
+            - "3306"
+        ports:
+            - "1331:3306"
+    python_app:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        networks:
+            - web-tier
+        volumes:
+            - ./script:/app/script:cached
+        env_file:
+            - ./backend/.env 
+        depends_on:
+            - db
+        restart: on-failure
+        ports:
+            - "8888:8000"
+        command: sh -c " python3 -c 'import services; services.create_database()' && uvicorn main:app --reload --port=8000 --host=0.0.0.0 "
+        expose:
+            - "8000"
+
+    frontend_app: 
+        container_name: "frontend-react"
+        depends_on:
+            - python_app
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        ports: 
+            - "3001:3000"
+        networks:
+            - web-tier
+
+networks:
+    default:
+        external:
+            name: bridge
+    web-tier:
+        name: fastapi_network
+        driver: bridge
+        external: true

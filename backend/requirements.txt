@@ -1,0 +1,9 @@
+sqlalchemy
+passlib
+fastapi
+sqlalchemy
+uvicorn
+PyMySQL
+PyJWT
+python-multipart
+mysqlclient

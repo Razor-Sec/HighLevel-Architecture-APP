@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.13.0a4-alpine
 RUN adduser -D razor
 RUN apk add build-base mariadb-connector-c-dev \ 
     && apk add --virtual build-deps gcc python3-dev musl-dev \  
